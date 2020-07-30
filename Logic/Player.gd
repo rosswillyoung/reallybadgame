@@ -12,6 +12,7 @@ export var damage = 10
 var dagger = preload("res://Scenes/Dagger.tscn")
 var bomb = preload('res://Scenes/Bomb.tscn')
 
+
 #signal dagger_thrown
 
 
@@ -93,5 +94,4 @@ func on_Sword_enemy_hit():
 func on_Dagger_enemy_hit():
 	print('enemy hit by dagger')
 	
-#func change_state(direction):
-#	current_direction = direction
+

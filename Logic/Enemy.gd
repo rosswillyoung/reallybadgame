@@ -4,6 +4,8 @@ var speed = 100
 var timer
 var random_direction = RandomNumberGenerator.new()
 signal died
+#var player_seen = false
+#var main_player
 
 func get_direction():
 	random_direction.randomize()
@@ -25,6 +27,8 @@ func _physics_process(delta):
 	var collision = move_and_collide(velocity * delta)
 	if collision:
 		velocity *= -1
+#	if player_seen:
+#		follow_player(main_player)
 #	if is_on_floor():
 #		velocity *= -1
 
@@ -38,7 +42,7 @@ func _on_Area2D_area_entered(area):
 #	elif area.get_parent().is_in_group('player'):
 #		print('collided with player')
 	else:
-		queue_free()
+		die()
 
 
 
@@ -46,7 +50,24 @@ func _on_Area2D_body_entered(body):
 	if body.get_parent().is_in_group('player'):
 #		print('damage taken!')
 		Global.player_health -=10
-#		print(Global.player_health)
-		queue_free()
+		die()
+		
+func die():
+	emit_signal("died")
+	self.queue_free()
 		
 
+
+
+func _on_VisionArea_body_entered(body):
+#	print(body)
+	if body.get_parent().is_in_group('player'):
+		follow_player(body)
+#		print('player entered enemies vision')
+	pass # Replace with function body.
+
+func follow_player(player):
+#	main_player = player
+	velocity = (player.global_position - global_position)
+#	player_seen = true
+	pass

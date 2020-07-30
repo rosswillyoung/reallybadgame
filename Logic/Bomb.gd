@@ -29,7 +29,9 @@ func _process(delta):
 func _on_ExplosionArea_body_entered(body):
 #	print(get_parent().get_parent().get_child(1))
 	
-	print(body.is_class('TileMap'))
+	if body.is_in_group('breakable'):
+		print('break')
+		body.queue_free()
 	if body.is_class('TileMap'):
 		print(body.world_to_map(self.position))
 #	print(body)
