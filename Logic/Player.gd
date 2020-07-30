@@ -23,7 +23,6 @@ func _ready():
 	dash_timer.set_wait_time(dash_delay)
 	dash_timer.connect('timeout', self, 'on_timer_complete')
 	add_child(dash_timer)
-	$Sword.connect('enemy_hit', self, 'on_Sword_enemy_hit')
 	
 	
 
@@ -59,17 +58,20 @@ func get_input():
 		dagger_thrown.connect('enemy_hit', self, 'on_Dagger_enemy_hit')
 		dagger_thrown.position = self.position
 		get_parent().add_child(dagger_thrown)
-		print(Global.INNER_WIDTH)
+#		print(Global.INNER_WIDTH)
 #		
 	if Input.is_action_just_pressed('e'):
 		var bomb_dropped = bomb.instance()
 		bomb_dropped.position = self.position
 		get_parent().add_child(bomb_dropped)
+#		bomb_dropped.connect('barrel_broken', self, 'on_Barrel_broken')
 		pass
 		
 #	Swing sword
 	if Input.is_action_just_pressed("left_click"):
-		$Sword.attack()
+#		$Sword.attack()
+		$AnimatedSprite.play()
+		$Area2D/CollisionShape2D.disabled = false
 		
 	if (Input.is_action_just_pressed("space")) && can_dash:
 		speed *= 20
@@ -88,10 +90,19 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	pass
 	
-func on_Sword_enemy_hit():
-	print('enemy hit by sword')
-	
-func on_Dagger_enemy_hit():
-	print('enemy hit by dagger')
+#func on_Sword_enemy_hit():
+#	print('enemy hit by sword')
+#
+#func on_Dagger_enemy_hit():
+#	print('enemy hit by dagger')
+#
+#func on_Barrel_broken():
+#	print('barrel broken')
 	
 
+
+
+func _on_AnimatedSprite_animation_finished():
+	$AnimatedSprite.stop()
+	$Area2D/CollisionShape2D.disabled = true
+	pass # Replace with function body.

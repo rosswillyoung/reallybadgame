@@ -4,10 +4,12 @@ var barrel = preload('res://Scenes/Barrel.tscn')
 var enemy = preload('res://Scenes/Enemy.tscn')
 var rng = RandomNumberGenerator.new()
 var enemies_killed = 0
+var enemy_list = []
+var barrel_list = []
 
 
 func spawn_enemies(number_of_enemies):
-	var enemy_list = []
+
 	for i in range(10):
 		var new_enemy = enemy.instance()
 		self.add_child(new_enemy)
@@ -28,6 +30,7 @@ func _ready():
 #	$TileMap/TileMap.generate_map()
 	generate_barrels(20)
 	spawn_enemies(10)
+#	print(enemy_list)
 	
 #	$TileMap/TileMap.generate_map($Player.position, spawn_enemies(10))
 #	print(enemy_list)
@@ -40,36 +43,50 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if self.get_child_count() == 2:
-		$TileMap/TileMap.generate_map()
-		generate_barrels(20)
-		spawn_enemies(10)
 	pass
 	
 func generate_barrels(number_of_barrels):
-	for i in range(number_of_barrels):
-		var new_barrel = barrel.instance()
-		self.add_child(new_barrel)
-		rng.randomize()
-		var random_x = rng.randf_range(70, 800 - 64)
-		var random_y = rng.randf_range(70, 600 - 64)
-		new_barrel.global_position = Vector2(random_x, random_y)
+#	for i in range(number_of_barrels):
+#		var new_barrel = barrel.instance()
+#		self.add_child(new_barrel)
+#		rng.randomize()
+#		var random_x = rng.randf_range(70, 800 - 64)
+#		var random_y = rng.randf_range(70, 600 - 64)
+#		new_barrel.global_position = Vector2(random_x, random_y)
+#		barrel_list.append(new_barrel)
+#		new_barrel.connect('barrel_broken', self, 'on_barrel_broken')
+		
 #
-#	var used_cells = $TileMap/TileMap.get_used_cells()
-##	print(used_cells)
-#	for i in used_cells.size():
-#		var object = $TileMap/TileMap.get_cellv(used_cells[i])
-##		print(object)
-#		if object == 0:
-#			var barrel_instance = barrel.instance()
-#			add_child(barrel_instance)
-#			barrel_instance.position = $TileMap/TileMap.map_to_world(used_cells[i])
-#	$TileMap/TileMap.clear()
+	var used_cells = $TileMap/TileMap.get_used_cells()
+#	print(used_cells)
+	for i in used_cells.size():
+		var object = $TileMap/TileMap.get_cellv(used_cells[i])
+#		print(object)
+		if object == 0:
+			var barrel_instance = barrel.instance()
+			add_child(barrel_instance)
+			barrel_instance.position.x = $TileMap/TileMap.map_to_world(used_cells[i]).x + 30
+			barrel_instance.position.y = $TileMap/TileMap.map_to_world(used_cells[i]).y + 20
+	$TileMap/TileMap.clear()
 	
 func enemy_died():
-	print('an enemy has died')
-	enemies_killed += 1
-	if enemies_killed >= 10:
+#	print('an enemy has died')
+	for i in enemy_list:
+		if !is_instance_valid(i):
+			enemy_list.erase(i)
+#	print(enemy_list.size())
+#	print(enemy_list)
+	
+	if enemy_list.size() <= 2:
 		spawn_enemies(10)
+		$TileMap/TileMap.generate_map()
 		generate_barrels(10)
-		enemies_killed = 0
+	enemies_killed += 1
+	
+func on_barrel_broken():
+	for i in barrel_list:
+		if !is_instance_valid(i):
+			barrel_list.erase(i)
+#	print('barrel broken')
+#	print(barrel_list)
+	

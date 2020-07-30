@@ -15,13 +15,11 @@ var map = [
 
 var barrel = preload('res://Scenes/Barrel.tscn')
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	generate_map()
 #	var x_counter = 0
 #	var y_counter = 0
 ##	var block_counter = 0
@@ -55,7 +53,7 @@ func generate_map():
 			if x == 1:
 				set_cellv(Vector2(y_counter, x_counter), 1)
 			else:
-				if random_number >= 9:
+				if random_number >= 8:
 					set_cellv(Vector2(y_counter, x_counter), 0)
 				else: 
 					set_cellv(Vector2(y_counter, x_counter), -1)

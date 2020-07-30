@@ -3,6 +3,8 @@ extends KinematicBody2D
 const TIME_TO_EXPLODE = 1
 
 var time = 0
+#signal barrel_broken
+
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -11,6 +13,7 @@ var time = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$AnimationPlayer.play("Countdown")
 	pass # Replace with function body.
 
 func on_timer_timeout():
@@ -30,10 +33,9 @@ func _on_ExplosionArea_body_entered(body):
 #	print(get_parent().get_parent().get_child(1))
 	
 	if body.is_in_group('breakable'):
-		print('break')
+#		print('break')
+#		emit_signal("barrel_broken")
 		body.queue_free()
-	if body.is_class('TileMap'):
-		print(body.world_to_map(self.position))
 #	print(body)
 #	print(TileMap.world_to_map(body.position))
 	pass # Replace with function body.

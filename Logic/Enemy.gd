@@ -39,6 +39,8 @@ func _on_Area2D_area_entered(area):
 #	print(area.get_parent().is_in_group('enemies'))
 	if area.get_parent().is_in_group('enemies'):
 		pass
+	elif area.get_parent().is_in_group('breakable'):
+		pass
 #	elif area.get_parent().is_in_group('player'):
 #		print('collided with player')
 	else:
@@ -62,12 +64,13 @@ func die():
 func _on_VisionArea_body_entered(body):
 #	print(body)
 	if body.get_parent().is_in_group('player'):
-		follow_player(body)
+#		follow_player(body)
+		velocity = (body.global_position - global_position)
 #		print('player entered enemies vision')
 	pass # Replace with function body.
 
-func follow_player(player):
-#	main_player = player
-	velocity = (player.global_position - global_position)
-#	player_seen = true
-	pass
+#func follow_player(player):
+##	main_player = player
+#
+##	player_seen = true
+#	pass
