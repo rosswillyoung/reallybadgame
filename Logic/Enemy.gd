@@ -51,7 +51,8 @@ func _on_Area2D_area_entered(area):
 func _on_Area2D_body_entered(body):
 	if body.get_parent().is_in_group('player'):
 #		print('damage taken!')
-		Global.player_health -=10
+		Global.player_health -= 5
+		print(Global.player_health)
 		die()
 		
 func die():
