@@ -12,6 +12,7 @@ export var damage = 10
 var dagger = preload("res://Scenes/Dagger.tscn")
 var bomb = preload('res://Scenes/Bomb.tscn')
 
+signal player_died
 
 #signal dagger_thrown
 
@@ -67,6 +68,7 @@ func get_input():
 		bomb_dropped.position = self.position
 		get_parent().add_child(bomb_dropped)
 		bomb_dropped.remove_from_group('player')
+		bomb_dropped.connect('bomb_hit_player', self, 'take_damage')
 #		bomb_dropped.connect('barrel_broken', self, 'on_Barrel_broken')
 		pass
 		
@@ -110,6 +112,12 @@ func _on_AnimatedSprite_animation_finished():
 	$Area2D/CollisionShape2D.disabled = true
 	pass # Replace with function body.
 
-func hit_by_enemy(damage):
+func take_damage(damage):
 	Global.player_health -= damage
 	$TextureProgress.value -= damage
+	if Global.player_health <= 0:
+		die()
+		
+func die():
+	emit_signal('player_died')
+	queue_free()

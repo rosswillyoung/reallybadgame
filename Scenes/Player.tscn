@@ -28,7 +28,9 @@ extents = Vector2( 20.681, 39.5886 )
 "player",
 ]]
 
-[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+[node name="KinematicBody2D" type="KinematicBody2D" parent="." groups=[
+"player",
+]]
 collision_mask = 12
 script = ExtResource( 2 )
 

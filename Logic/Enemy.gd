@@ -58,6 +58,7 @@ func _on_Area2D_body_entered(body):
 		
 func die():
 	emit_signal("died")
+	self.remove_from_group('Enemies')
 	self.queue_free()
 		
 

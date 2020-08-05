@@ -3,6 +3,8 @@ extends KinematicBody2D
 const TIME_TO_EXPLODE = 1
 
 var time = 0
+var damage = 20
+signal bomb_hit_player
 #signal barrel_broken
 
 
@@ -36,7 +38,8 @@ func _on_ExplosionArea_body_entered(body):
 #		print('break')
 #		emit_signal("barrel_broken")
 		body.queue_free()
-#	print(body)
-#	print(TileMap.world_to_map(body.position))
+	elif body.is_in_group('player'):
+		emit_signal('bomb_hit_player', 20)
+		print('player hit by bomb')
 	pass # Replace with function body.
 
