@@ -51,11 +51,12 @@ shape = SubResource( 3 )
 disabled = true
 
 [node name="TextureProgress" type="TextureProgress" parent="KinematicBody2D"]
-margin_left = -1.32684
-margin_top = -32.2337
-margin_right = 62.6732
-margin_bottom = 31.7663
+margin_left = -42.185
+margin_top = -21.2294
+margin_right = 21.815
+margin_bottom = 42.7706
 rect_rotation = 90.0
+rect_scale = Vector2( 0.637354, -0.559866 )
 texture_under = ExtResource( 3 )
 texture_progress = ExtResource( 8 )
 tint_under = Color( 0, 0, 0, 1 )

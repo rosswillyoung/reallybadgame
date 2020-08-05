@@ -3,7 +3,9 @@ var velocity = Vector2.ZERO
 var speed = 100
 var timer
 var random_direction = RandomNumberGenerator.new()
+var damage = 10
 signal died
+signal hit_player
 #var player_seen = false
 #var main_player
 
@@ -51,8 +53,7 @@ func _on_Area2D_area_entered(area):
 func _on_Area2D_body_entered(body):
 	if body.get_parent().is_in_group('player'):
 #		print('damage taken!')
-		Global.player_health -= 5
-		print(Global.player_health)
+		emit_signal("hit_player", damage)
 		die()
 		
 func die():
@@ -67,6 +68,7 @@ func _on_VisionArea_body_entered(body):
 	if body.get_parent().is_in_group('player'):
 #		follow_player(body)
 		velocity = (body.global_position - global_position)
+		
 #		print('player entered enemies vision')
 	pass # Replace with function body.
 
@@ -75,3 +77,5 @@ func _on_VisionArea_body_entered(body):
 #
 ##	player_seen = true
 #	pass
+
+	

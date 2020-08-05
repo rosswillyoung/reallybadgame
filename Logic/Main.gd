@@ -23,6 +23,7 @@ func spawn_enemies(number_of_enemies):
 		new_enemy.global_position = enemy_position
 		enemy_list.append(new_enemy)
 		new_enemy.connect('died', self, 'enemy_died')
+		new_enemy.connect('hit_player', $Player/KinematicBody2D, 'hit_by_enemy')
 	return enemy_list
 
 # Called when the node enters the scene tree for the first time.
@@ -77,7 +78,7 @@ func enemy_died():
 #	print(enemy_list.size())
 #	print(enemy_list)
 	
-	if enemy_list.size() <= 2:
+	if enemy_list.size() <= 1:
 		spawn_enemies(10)
 		$TileMap/TileMap.generate_map()
 		generate_barrels(10)
@@ -90,3 +91,6 @@ func on_barrel_broken():
 #	print('barrel broken')
 #	print(barrel_list)
 	
+#func player_hit():
+#	print('player hit by enemy')
+#	$Player/KinematicBody2D/TextureProgress.value -= 5

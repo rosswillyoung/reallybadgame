@@ -3,9 +3,9 @@ extends KinematicBody2D
 var velocity = Vector2.ZERO
 var speed = 400
 #enum Directions {RIGHT, LEFT, UP, DOWN}
-var current_direction = 'right'
-var dash_timer = null
-var dash_delay = 2
+#var current_direction = 'right'
+#var dash_timer = null
+#var dash_delay = 2
 var can_dash = true
 export(NodePath) var PlayerPath
 export var damage = 10
@@ -18,11 +18,12 @@ var bomb = preload('res://Scenes/Bomb.tscn')
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	dash_timer = Timer.new()
-	dash_timer.set_one_shot(true)
-	dash_timer.set_wait_time(dash_delay)
-	dash_timer.connect('timeout', self, 'on_timer_complete')
-	add_child(dash_timer)
+#	dash_timer = Timer.new()
+#	dash_timer.set_one_shot(true)
+#	dash_timer.set_wait_time(dash_delay)
+#	dash_timer.connect('timeout', self, 'on_timer_complete')
+#	add_child(dash_timer)
+	$TextureProgress.value = 100
 	
 	
 
@@ -38,12 +39,12 @@ func get_input():
 	if Input.is_action_pressed('d'):
 		velocity.x += speed
 #		change_state(Directions.RIGHT)
-		current_direction = 'right'
+#		current_direction = 'right'
 #		$Sword.scale.x = 1
 	if Input.is_action_pressed('a'):
 		velocity.x -= speed
 #		change_state(Directions.LEFT)
-		current_direction = 'left'
+#		current_direction = 'left'
 #		$Sword.scale.x = -1
 	if Input.is_action_pressed('w'):
 		velocity.y -= speed
@@ -58,12 +59,14 @@ func get_input():
 		dagger_thrown.connect('enemy_hit', self, 'on_Dagger_enemy_hit')
 		dagger_thrown.position = self.position
 		get_parent().add_child(dagger_thrown)
+		dagger_thrown.remove_from_group('player')
 #		print(Global.INNER_WIDTH)
 #		
 	if Input.is_action_just_pressed('e'):
 		var bomb_dropped = bomb.instance()
 		bomb_dropped.position = self.position
 		get_parent().add_child(bomb_dropped)
+		bomb_dropped.remove_from_group('player')
 #		bomb_dropped.connect('barrel_broken', self, 'on_Barrel_broken')
 		pass
 		
@@ -77,7 +80,7 @@ func get_input():
 		speed *= 20
 		can_dash = false
 		
-		dash_timer.start()
+#		dash_timer.start()
 	# Stops sprite from moving faster if diagonal
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
@@ -106,3 +109,7 @@ func _on_AnimatedSprite_animation_finished():
 	$AnimatedSprite.stop()
 	$Area2D/CollisionShape2D.disabled = true
 	pass # Replace with function body.
+
+func hit_by_enemy(damage):
+	Global.player_health -= damage
+	$TextureProgress.value -= damage
