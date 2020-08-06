@@ -7,7 +7,8 @@ signal enemy_hit
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	self.throw_at_mouse()
-	pass # Replace with function body.
+	pass  # Replace with function body.
+
 
 func throw_at_mouse():
 	var direction = (get_global_mouse_position() - self.global_position).normalized()
@@ -18,6 +19,7 @@ func throw_at_mouse():
 #	move_and_collide()
 #	$AnimationPlayer.play("Rotate")
 	pass
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
@@ -40,4 +42,4 @@ func _on_CollisionDetection_body_entered(body):
 		queue_free()
 	elif body.get_collision_layer() == 4:
 		queue_free()
-	pass # Replace with function body.
+	pass  # Replace with function body.
