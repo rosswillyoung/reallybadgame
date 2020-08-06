@@ -78,12 +78,6 @@ func get_input():
 		$AnimatedSprite.play()
 		$Area2D/CollisionShape2D.disabled = false
 		
-	if (Input.is_action_just_pressed("space")) && can_dash:
-		speed *= 20
-		can_dash = false
-		
-#		dash_timer.start()
-	# Stops sprite from moving faster if diagonal
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 		
@@ -95,16 +89,7 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	pass
 	
-#func on_Sword_enemy_hit():
-#	print('enemy hit by sword')
-#
-#func on_Dagger_enemy_hit():
-#	print('enemy hit by dagger')
-#
-#func on_Barrel_broken():
-#	print('barrel broken')
 	
-
 
 
 func _on_AnimatedSprite_animation_finished():

@@ -6,6 +6,7 @@ var random_direction = RandomNumberGenerator.new()
 var damage = 10
 signal died
 signal hit_player
+signal test
 #var player_seen = false
 #var main_player
 
@@ -46,7 +47,7 @@ func _on_Area2D_area_entered(area):
 #	elif area.get_parent().is_in_group('player'):
 #		print('collided with player')
 	else:
-		die()
+		die(self)
 
 
 
@@ -54,10 +55,10 @@ func _on_Area2D_body_entered(body):
 	if body.get_parent().is_in_group('player'):
 #		print('damage taken!')
 		emit_signal("hit_player", damage)
-		die()
+		die(self)
 		
-func die():
-	emit_signal("died")
+func die(enemy):
+	emit_signal("died", enemy)
 	self.remove_from_group('Enemies')
 	self.queue_free()
 		
