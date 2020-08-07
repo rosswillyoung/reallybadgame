@@ -2,6 +2,7 @@ extends Node2D
 
 var barrel = preload('res://Scenes/Barrel.tscn')
 var small_enemy = preload('res://Scenes/Enemy.tscn')
+var boss_enemy = preload('res://Scenes/SlimeBoss.tscn')
 var rng = RandomNumberGenerator.new()
 var spawn_counter = 0
 var enemy_list = []
@@ -11,8 +12,8 @@ var barrel_list = []
 # Spawn a group of enemies in random locations
 func spawn_enemies(number_of_enemies):
 	spawn_counter += 1
-	if spawn_counter % 10 == 0:
-		print('Spawn Boss')
+	if spawn_counter % 2 == 0:
+		spawn_boss()
 	else:
 		for i in range(10):
 			var new_enemy = small_enemy.instance()
@@ -25,16 +26,26 @@ func spawn_enemies(number_of_enemies):
 			enemy_list.append(new_enemy)
 			new_enemy.connect('died', self, 'enemy_died')
 			new_enemy.connect('hit_player', $Player/KinematicBody2D, 'take_damage')
+		$TileMap/TileMap.generate_map()
+		generate_barrels()
 
 
-#	return enemy_list
+func spawn_boss():
+	var boss = boss_enemy.instance()
+	self.add_child(boss)
+	var boss_position = Vector2(300, 400)
+	boss.global_position = boss_position
+	boss.connect('died', self, 'enemy_died')
+	for i in barrel_list:
+		on_barrel_broken(i)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	$TileMap/TileMap.generate_map()
-	generate_barrels(20)
+	generate_barrels()
 	spawn_enemies(10)
+	# spawn_boss()
 	$Player/KinematicBody2D.connect('player_died', self, 'game_over')
 
 
@@ -43,7 +54,7 @@ func _process(delta):
 	pass
 
 
-func generate_barrels(number_of_barrels):
+func generate_barrels():
 	var used_cells = $TileMap/TileMap.get_used_cells()
 	for i in used_cells.size():
 		var object = $TileMap/TileMap.get_cellv(used_cells[i])
@@ -52,7 +63,10 @@ func generate_barrels(number_of_barrels):
 			add_child(barrel_instance)
 			barrel_instance.position.x = $TileMap/TileMap.map_to_world(used_cells[i]).x + 30
 			barrel_instance.position.y = $TileMap/TileMap.map_to_world(used_cells[i]).y + 20
+			barrel_list.append(barrel_instance)
+			barrel_instance.connect('barrel_broken', self, '_on_Barrel_broken')
 	$TileMap/TileMap.clear()
+	print(barrel_list)
 
 
 func enemy_died(enemy):
@@ -66,14 +80,11 @@ func enemy_died(enemy):
 	# Spawn more enemies and barrels if there are 1 or less enemies left
 	if enemy_list.size() < 1:
 		spawn_enemies(10)
-		$TileMap/TileMap.generate_map()
-		generate_barrels(10)
 
 
-func on_barrel_broken():
-	for i in barrel_list:
-		if ! is_instance_valid(i):
-			barrel_list.erase(i)
+func on_barrel_broken(broken_barrel):
+	barrel_list.erase(broken_barrel)
+	broken_barrel.queue_free()
 
 
 func game_over():

@@ -8,7 +8,6 @@ var damage = 10
 var rng = RandomNumberGenerator.new()
 signal died
 signal hit_player
-signal test
 #var player_seen = false
 #var main_player
 
@@ -64,6 +63,9 @@ func _on_Area2D_body_entered(body):
 
 
 func die(enemy):
+	$AnimatedSprite.play()
+	self.velocity = Vector2.ZERO
+	yield(get_tree().create_timer(0.5), 'timeout')
 	emit_signal("died", enemy)
 	self.remove_from_group('Enemies')
 	self.queue_free()
