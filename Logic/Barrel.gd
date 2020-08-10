@@ -18,8 +18,15 @@ func _physics_process(delta):
 	pass
 
 
-func _exit_tree():
+# func _exit_tree():
+# 	emit_signal('barrel_broken', self)
+
+
+func die():
+	$Barrel.play()
+	yield(get_tree().create_timer(0.5), 'timeout')
 	emit_signal('barrel_broken', self)
+	queue_free()
 
 
 func _on_SpawnChecker_body_entered(body):

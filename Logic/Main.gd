@@ -12,10 +12,10 @@ var barrel_list = []
 # Spawn a group of enemies in random locations
 func spawn_enemies(number_of_enemies):
 	spawn_counter += 1
-	if spawn_counter % 2 == 0:
+	if spawn_counter % 5 == 0:
 		spawn_boss()
 	else:
-		for i in range(10):
+		for i in range(number_of_enemies):
 			var new_enemy = small_enemy.instance()
 			self.add_child(new_enemy)
 			rng.randomize()
@@ -36,22 +36,21 @@ func spawn_boss():
 	var boss_position = Vector2(300, 400)
 	boss.global_position = boss_position
 	boss.connect('died', self, 'enemy_died')
-	for i in barrel_list:
-		on_barrel_broken(i)
+	boss.connect('hit_player', $Player/KinematicBody2D, 'take_damage')
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	$TileMap/TileMap.generate_map()
 	generate_barrels()
-	spawn_enemies(10)
-	# spawn_boss()
+	# spawn_enemies(10)
+	spawn_boss()
 	$Player/KinematicBody2D.connect('player_died', self, 'game_over')
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+# # Called every frame. 'delta' is the elapsed time since the previous frame.
+# func _process(delta):
+# 	pass
 
 
 func generate_barrels():
@@ -66,7 +65,7 @@ func generate_barrels():
 			barrel_list.append(barrel_instance)
 			barrel_instance.connect('barrel_broken', self, '_on_Barrel_broken')
 	$TileMap/TileMap.clear()
-	print(barrel_list)
+	# print(barrel_list)
 
 
 func enemy_died(enemy):
@@ -83,8 +82,9 @@ func enemy_died(enemy):
 
 
 func on_barrel_broken(broken_barrel):
+	# broken_barrel.queue_free()
 	barrel_list.erase(broken_barrel)
-	broken_barrel.queue_free()
+	# broken_barrel.queue_free()
 
 
 func game_over():

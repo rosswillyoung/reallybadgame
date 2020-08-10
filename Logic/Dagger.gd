@@ -1,6 +1,7 @@
 extends RigidBody2D
 var speed = 400
 var velocity = Vector2.ZERO
+var damage = 10
 signal enemy_hit
 
 

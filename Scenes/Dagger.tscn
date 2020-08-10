@@ -6,7 +6,9 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 14.4176, 6.03946 )
 
-[node name="Dagger" type="RigidBody2D"]
+[node name="Dagger" type="RigidBody2D" groups=[
+"weapons",
+]]
 collision_layer = 2
 collision_mask = 14
 gravity_scale = 0.0

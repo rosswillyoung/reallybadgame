@@ -4,10 +4,11 @@ var velocity = Vector2.ZERO
 var speed = 100
 var timer = 0
 var random_direction = RandomNumberGenerator.new()
-var damage = 10
+var damage = 30
+var _health = 100
 var rng = RandomNumberGenerator.new()
-# signal died
-# signal hit_player
+signal died
+signal hit_player
 #var player_seen = false
 #var main_player
 
@@ -21,7 +22,11 @@ func get_direction():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	for i in get_parent().get_children():
+		if i.is_in_group('breakable'):
+			i.queue_free()
 	get_direction()
+	$TextureProgress.value = 100
 	pass  # Replace with function body.
 
 
@@ -35,28 +40,20 @@ func _physics_process(delta):
 	timer += delta
 
 
-#	if player_seen:
-#		follow_player(main_player)
-#	if is_on_floor():
-#		velocity *= -1
+func _on_DamageArea_body_entered(body):
+	if body.is_in_group("player"):
+		print('player hit boss')
+		emit_signal("hit_player", damage)
+	elif body.is_in_group('weapons'):
+		take_damage(body.damage)
+	print(body)
 
 
-func _on_Area2D_area_entered(area):
-#	print(area.get_parent().is_in_group('enemies'))
-	if area.get_parent().is_in_group('enemies'):
-		pass
-	elif area.get_parent().is_in_group('breakable'):
-		pass
-#	elif area.get_parent().is_in_group('player'):
-#		print('collided with player')
-	else:
-		die(self)
-
-
-func _on_Area2D_body_entered(body):
-	if body.get_parent().is_in_group('player'):
-#		print('damage taken!')
-		# emit_signal("hit_player", damage)
+func take_damage(weapon_damage):
+	print('boss taken ', weapon_damage, ' damage')
+	_health -= weapon_damage
+	$TextureProgress.value -= weapon_damage
+	if _health <= 0:
 		die(self)
 
 
